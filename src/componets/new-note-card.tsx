@@ -3,7 +3,11 @@ import { X } from 'lucide-react'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 
-export function NewNoteCard() {
+interface newNoteCardProps {
+  onNoteCreated: (content: string) => void
+}
+
+export function NewNoteCard({ onNoteCreated }: newNoteCardProps ) {
     const [shouldShowOnBoarding, setShouldOnBoarding] = useState(true)
     const [content, setContent] = useState('')
 
@@ -22,6 +26,11 @@ export function NewNoteCard() {
     function handleSaveNote(event: FormEvent) {
       event.preventDefault()
 
+      onNoteCreated(content)
+
+      setContent('')
+      setShouldOnBoarding(true)
+
       toast.success('Nota criada com sucesso!')
     }
 
@@ -29,7 +38,7 @@ export function NewNoteCard() {
     <Dialog.Root>
       <Dialog.Trigger className="rounded-md flex flex-col bg-slate-700 text-left p-5 gap-3 outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
          <span className="text-sm font-medium text-slate-200">
-           Adicionar   nota
+           Adicionar nota
          </span>
    
          <p className="text-sm leading-6 text-slate-400">
@@ -59,6 +68,7 @@ export function NewNoteCard() {
                     autoFocus 
                     className="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"
                     onChange={handleContentChanged}
+                    value={content}
                   />
                 )}
               </div>
